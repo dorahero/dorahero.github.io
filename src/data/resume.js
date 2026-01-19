@@ -1,9 +1,11 @@
+import avatarImage from '../pic/IMG_8883.JPG';
+
 export const profile = {
     name: "Red Li",
     title: "創造數位體驗 連結未來科技",
     role: "前端工程師 & UI 設計師",
     description: "一名熱愛技術的前端工程師與 UI 設計師。專注於打造直觀、美觀且高效的網頁應用程式。",
-    avatar: "/src/pic/IMG_8883.JPG", // 注意：Vite 開發環境下可直接引用，生產環境可能需調整
+    avatar: avatarImage,
     about: {
         title: "關於我",
         description: [
