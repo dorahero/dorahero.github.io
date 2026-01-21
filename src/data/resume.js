@@ -1,4 +1,4 @@
-import avatarImage from '../pic/me.png';
+import avatarImage from '../pic/me.jpeg';
 
 export const profile = {
     name: "Red Li",
