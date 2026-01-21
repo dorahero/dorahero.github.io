@@ -54,7 +54,21 @@
           <a href="#about" class="block text-slate-600 hover:text-primary" @click="toggleMenu">自我介紹</a>
           <a href="#education" class="block text-slate-600 hover:text-primary" @click="toggleMenu">學習經歷</a>
           <a href="#experience" class="block text-slate-600 hover:text-primary" @click="toggleMenu">工作經歷</a>
-          <a href="#portfolio" class="block text-slate-600 hover:text-primary" @click="toggleMenu">作品集</a>
+          
+          <div class="pt-2 border-t border-slate-100">
+            <span class="block text-sm font-semibold text-slate-400 mb-2 px-2">小工具</span>
+            <div class="pl-4 space-y-3">
+              <a 
+                v-for="project in portfolio" 
+                :key="project.id" 
+                :href="`#${project.id}`"
+                class="block text-slate-600 hover:text-primary"
+                @click="toggleMenu"
+              >
+                {{ project.title }}
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
