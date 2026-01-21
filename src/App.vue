@@ -7,15 +7,33 @@
     >
       <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
         <a href="#" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-          MyResume.
+          Red.
         </a>
 
         <!-- 桌面選單 -->
-        <div class="hidden md:flex space-x-8 font-medium text-slate-600">
+        <div class="hidden md:flex items-center space-x-8 font-medium text-slate-600">
           <a href="#about" class="hover:text-primary transition-colors">自我介紹</a>
           <a href="#education" class="hover:text-primary transition-colors">學習經歷</a>
           <a href="#experience" class="hover:text-primary transition-colors">工作經歷</a>
-          <a href="#portfolio" class="hover:text-primary transition-colors">作品集</a>
+          <!-- 作品集 Dropdown -->
+          <div class="relative group">
+            <button class="flex items-center gap-1 hover:text-primary transition-colors py-2">
+              小工具
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 transition-transform group-hover:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="absolute left-0 mt-0 w-56 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left z-50 overflow-hidden">
+               <div class="py-2">
+                <a 
+                  v-for="project in portfolio" 
+                  :key="project.id" 
+                  :href="`#${project.id}`"
+                  class="block px-4 py-3 text-sm text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors"
+                >
+                  {{ project.title }}
+                </a>
+               </div>
+            </div>
+          </div>
         </div>
 
         <!-- 手機選單按鈕 -->
@@ -52,29 +70,11 @@
           <div
             class="inline-block px-4 py-2 bg-blue-50 text-primary rounded-full text-sm font-semibold mb-6 border border-blue-100"
           >
-            👋 你好，我是 {{ profile.name }}
+            👋 Hi, I'm {{ profile.name }}
           </div>
-          <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6 text-slate-900">
-            創造 <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">數位體驗</span> <br />
-            連結未來科技
-          </h1>
           <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg">
             {{ profile.description }}
           </p>
-          <div class="flex gap-4">
-            <a
-              href="#portfolio"
-              class="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-2xl font-semibold shadow-glow hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
-            >
-              查看作品 <ArrowRight class="w-4 h-4" />
-            </a>
-            <a
-              href="#contact"
-              class="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-2xl font-semibold hover:bg-slate-50 transition-colors flex items-center gap-2"
-            >
-              聯絡我 <Mail class="w-4 h-4" />
-            </a>
-          </div>
         </div>
         <div class="relative fade-in-up delay-200 flex justify-center md:justify-end">
           <!-- 頭像卡片 -->
@@ -160,35 +160,7 @@
     <!-- 學習經歷與工作經歷 -->
     <section class="py-20 bg-slate-50" id="experience-education">
       <div class="max-w-6xl mx-auto px-6">
-        <div class="grid md:grid-cols-2 gap-16">
-          <!-- 學習經歷 -->
-          <div id="education" class="fade-in-up">
-            <h2 class="text-3xl font-bold mb-10 flex items-center gap-3">
-              <div class="p-2 bg-blue-100 text-primary rounded-xl">
-                <GraduationCap class="w-6 h-6" />
-              </div>
-              學習經歷
-            </h2>
-
-            <div class="space-y-8 relative pl-8 border-l-2 border-slate-200">
-              <div class="relative" v-for="edu in education" :key="edu.degree">
-                <div
-                  class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-white border-4"
-                  :class="edu.current ? 'border-primary' : 'border-slate-300'"
-                ></div>
-                <span
-                  class="text-sm font-bold px-3 py-1 rounded-full mb-2 inline-block"
-                  :class="edu.current ? 'text-primary bg-blue-50' : 'text-slate-500 bg-slate-100'"
-                >
-                  {{ edu.year }}
-                </span>
-                <h3 class="text-xl font-bold text-slate-800">{{ edu.degree }}</h3>
-                <p class="text-slate-500 mb-2">{{ edu.school }}</p>
-                <p class="text-slate-600 text-sm">{{ edu.desc }}</p>
-              </div>
-            </div>
-          </div>
-
+        <div class="grid grid-cols-1 gap-16">
           <!-- 工作經歷 -->
           <div id="experience" class="fade-in-up delay-100">
             <h2 class="text-3xl font-bold mb-10 flex items-center gap-3">
@@ -218,58 +190,34 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- 作品集 -->
-    <section id="portfolio" class="py-20 bg-white">
-      <div class="max-w-6xl mx-auto px-6">
-        <div class="text-center mb-16 fade-in-up">
-          <h2 class="text-3xl font-bold mb-4">精選作品</h2>
-          <p class="text-slate-500 max-w-2xl mx-auto">
-            以下是我參與過的專案，涵蓋了企業官網、管理後台以及互動式活動網頁。
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div
-            v-for="(project, index) in portfolio"
-            :key="index"
-            class="group bg-white rounded-3xl overflow-hidden shadow-soft hover:shadow-2xl transition-all duration-300 border border-slate-100 fade-in-up"
-            :class="`delay-${index * 100}`"
-          >
-            <div class="relative h-48 overflow-hidden">
-              <img
-                :src="project.image"
-                :alt="project.title"
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div
-                class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-              >
-                <button
-                  class="bg-white text-slate-900 px-6 py-2 rounded-full font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
-                >
-                  查看詳情
-                </button>
+          <!-- 學習經歷 -->
+          <div id="education" class="fade-in-up">
+            <h2 class="text-3xl font-bold mb-10 flex items-center gap-3">
+              <div class="p-2 bg-blue-100 text-primary rounded-xl">
+                <GraduationCap class="w-6 h-6" />
               </div>
-            </div>
-            <div class="p-6">
-              <div class="flex gap-2 mb-3">
+              學習經歷
+            </h2>
+
+            <div class="space-y-8 relative pl-8 border-l-2 border-slate-200">
+              <div class="relative" v-for="edu in education" :key="edu.degree">
+                <div
+                  class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-white border-4"
+                  :class="edu.current ? 'border-primary' : 'border-slate-300'"
+                ></div>
                 <span
-                  v-for="tag in project.tags"
-                  :key="tag.text"
-                  class="text-xs font-bold px-2 py-1 rounded-md"
-                  :class="tag.class"
+                  class="text-sm font-bold px-3 py-1 rounded-full mb-2 inline-block"
+                  :class="edu.current ? 'text-primary bg-blue-50' : 'text-slate-500 bg-slate-100'"
                 >
-                  {{ tag.text }}
+                  {{ edu.year }}
                 </span>
+                <h3 class="text-xl font-bold text-slate-800">{{ edu.degree }}</h3>
+                <p class="text-slate-500 mb-2">{{ edu.school }}</p>
+               <ul class="list-disc list-inside text-slate-600 text-sm space-y-1">
+                  <li v-for="desc in edu.desc" :key="desc">{{ desc }}</li>
+                </ul>
               </div>
-              <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                {{ project.title }}
-              </h3>
-              <p class="text-slate-500 text-sm mb-4">{{ project.desc }}</p>
             </div>
           </div>
         </div>
@@ -286,19 +234,19 @@
 
         <div class="flex flex-col md:flex-row justify-center gap-6 mb-12">
           <a
-            href="mailto:example@email.com"
+            :href="`mailto:${socialLinks.email}`"
             class="flex items-center justify-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-2xl font-bold hover:bg-slate-200 transition-colors"
           >
             <Mail class="w-4 h-4" /> 發送郵件
           </a>
           <a
-            href="#"
+            :href="socialLinks.linkedin"
             class="flex items-center justify-center gap-3 bg-slate-800 text-white px-8 py-4 rounded-2xl font-bold hover:bg-slate-700 transition-colors border border-slate-700"
           >
             <Linkedin class="w-4 h-4 ml-1" /> LinkedIn
           </a>
           <a
-            href="#"
+            :href="socialLinks.github"
             class="flex items-center justify-center gap-3 bg-slate-800 text-white px-8 py-4 rounded-2xl font-bold hover:bg-slate-700 transition-colors border border-slate-700"
           >
             <Github class="w-4 h-4" /> GitHub
@@ -334,7 +282,8 @@ import {
   skillTags, 
   education, 
   experience, 
-  portfolio 
+  portfolio,
+  socialLinks
 } from './data/resume';
 
 // State

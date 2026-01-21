@@ -1,51 +1,65 @@
-import avatarImage from '../pic/IMG_8883.JPG';
+import avatarImage from '../pic/me.png';
 
 export const profile = {
     name: "Red Li",
     title: "創造數位體驗 連結未來科技",
-    role: "前端工程師 & UI 設計師",
-    description: "一名熱愛技術的前端工程師與 UI 設計師。專注於打造直觀、美觀且高效的網頁應用程式。",
+    role: "全端工程師",
+    description: "從具備數學邏輯基礎的熱忱開發者，熱愛挑戰與學習新技術。",
     avatar: avatarImage,
     about: {
         title: "關於我",
         description: [
-            "我擁有資訊工程碩士學位，並具備 5 年的前端開發經驗。我熱衷於將複雜的問題轉化為簡單、優雅的解決方案。",
-            "除了寫程式，我平時也喜歡攝影和研究新的 UI/UX 趨勢，這讓我在開發時能同時兼顧技術實現與美感。"
+            "邏輯擔當： 從小熱愛數學，擅長將複雜問題拆解分析，現在將這份邏輯力運用在程式開發上。",
+            "效率追求者： 喜歡尋找更高效的解決方案（也可以說是為了『偷懶』而努力自動化！），致力於提升團隊產出品質。",
+            "學習與挑戰： 從資策會結訓到投入實戰，始終保持海綿般的吸收力與抗壓性。",
+            "離線狀態： 🏸 羽球場上的殺球手 / 🎧 獨立音樂成癮者。"
         ],
         stats: [
-            { value: "50+", label: "完成專案", color: "text-primary" },
-            { value: "100%", label: "客戶滿意度", color: "text-secondary" }
+            { value: "10+", label: "完成專案", color: "text-primary" },
+            { value: "99%", label: "客戶滿意度", color: "text-secondary" }
         ]
     }
 };
 
 export const skills = [
-    { name: '前端開發 (React, Vue)', level: 95 },
-    { name: 'UI/UX 設計 (Figma)', level: 85 },
-    { name: '後端整合 (Node.js, Firebase)', level: 70 },
+    { name: '資料庫開發 (Oracle, PL/SQL)', level: 90 },
+    { name: '後端整合 (Java, Spring Boot, Python)', level: 85 },
+    { name: '前端開發 (Vue.js)', level: 75 },
 ];
 
 export const skillTags = [
-    'HTML5/CSS3',
-    'Tailwind CSS',
-    'JavaScript (ES6+)',
-    'Git/GitHub',
-    'RWD',
+    'Python',
+    'Java',
+    'HTML/CSS',
+    'Vue.js',
+    'Oracle',
+    'SQL',
+    'Shell',
+    'Git',
+    'Docker',
+    'Jenkins',
 ];
 
 export const education = [
     {
-        year: '2018 - 2020',
-        degree: '資訊工程研究所 碩士',
-        school: '國立嘉義大學',
-        desc: '主修人工智慧與人機互動，論文研究主題為《基於深度學習的網頁佈局生成系統》。',
-        current: true,
+        year: '2020 - 2020',
+        degree: 'AI/Big Data 資料分析師養成班',
+        school: '緯育Tibame',
+        desc: ['密集技術培訓（600 小時）： 接受紮實的軟體工程訓練，熟練掌握 Python、SQL、Linux、MongoDB 與 Docker 等核心技術。'],
+        current: false,
     },
     {
-        year: '2014 - 2018',
-        degree: '資訊管理學系 學士',
-        school: '輔仁大學',
-        desc: '擔任系學會資訊長，負責架設與維護系所網站，並多次參與黑客松競賽獲獎。',
+        year: '2017 - 2019',
+        degree: '應用數學所 碩士',
+        school: '國立中興大學',
+        desc: [],
+        current: false,
+    },
+    {
+        year: '2013 - 2017',
+        degree: '應用數學系 學士',
+        school: '國立嘉義大學',
+        desc: [],
         current: false,
     },
 ];
@@ -53,21 +67,36 @@ export const education = [
 export const experience = [
     {
         year: '2022 - 至今',
-        title: '資深前端工程師',
+        title: '全端工程師',
         company: '旺宏電子股份有限公司',
         tasks: [
-            '負責公司核心 SaaS 產品的前端架構重構，提升載入速度 40%。',
-            '帶領 3 人前端團隊，建立 Code Review 機制與 UI Component Library。',
-            '與設計師緊密合作，實現高品質的互動特效。',
+            '利用 PL/SQL 結合 Java 實作複雜的數據清理自動化，確保下游分析數據的可靠性。',
+            '負責旺宏分析系統 sNOVA 的功能擴充，將產銷與系統邏輯深度結合，提升投料與出貨效率。',
+            '採用 Vue.js 框架開發輕量化前端架構，實現產線資訊的即時監控與互動。',
         ],
         current: true,
     },
     {
-        year: '2020 - 2022',
-        title: '網頁設計師',
+        year: '2021 - 2022',
+        title: 'AI 工程師',
         company: '華邦電子股份有限公司',
         tasks: [
-            '負責多個電商網站的切版與活動頁面設計，熟悉 RWD 與 SEO 優化技巧。',
+            '改良測試演算法，縮短單片晶圓測試時間，提升整體測試產能。',
+            '開發自動化測試腳本，減少人工介入，降低測試成本。',
+            '應用非監督式學習模型 De-noising Auto-Encoder 進行晶圓圖特徵擷取與降噪，強化異常圖譜識別能力。',
+            '實現測試數據的自動彙整與報告產出，確保資訊即時性並減少人為錯誤。'
+        ],
+        current: false,
+    },
+    {
+        year: '2020 - 2021',
+        title: 'AI 工程師',
+        company: '模多眼力股份有限公司',
+        tasks: [
+            '使用 Docker 部署 Scrapy 爬蟲，實現在樹莓派上自動抓取數據。',
+            '利用 Tableau 呈現分析結果，提高數據解讀效率。',
+            '使用 OpenCV 進行亮度調整、文字轉正、去雜點、拉開文字間距等處理。',
+            '實使用自訓練模型自動貼標，提升數據標註效率。'
         ],
         current: false,
     },
@@ -75,33 +104,18 @@ export const experience = [
 
 export const portfolio = [
     {
-        title: '企業數據管理後台',
+        id: 'enterprise-dashboard',
+        title: '旺宏分析系統 sNOVA',
         desc: '為金融客戶打造的數據視覺化儀表板，支援即時數據串接與圖表匯出功能。',
         image:
             'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        tags: [
-            { text: 'Dashboard', class: 'text-primary bg-blue-50' },
-            { text: 'React', class: 'text-secondary bg-indigo-50' },
-        ],
-    },
-    {
-        title: '時尚服飾電商平台',
-        desc: '整合金流與物流系統的 RWD 電商網站，著重於行動裝置的購物體驗優化。',
-        image:
-            'https://images.unsplash.com/photo-1555421689-491a97ff2040?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        tags: [
-            { text: 'E-commerce', class: 'text-orange-500 bg-orange-50' },
-            { text: 'Next.js', class: 'text-slate-600 bg-slate-100' },
-        ],
-    },
-    {
-        title: '健康管理 App',
-        desc: '跨平台行動應用程式，結合手機感測器記錄步數與飲食追蹤功能。',
-        image:
-            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        tags: [
-            { text: 'App', class: 'text-green-600 bg-green-50' },
-            { text: 'React Native', class: 'text-secondary bg-indigo-50' },
-        ],
+        url: '',
     },
 ];
+
+export const socialLinks = {
+    email: 'dorahero2727@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/ben-lee-7044a51b3/',
+    github: 'https://github.com/dorahero',
+};
+
