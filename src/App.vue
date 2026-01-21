@@ -26,7 +26,7 @@
                 <a 
                   v-for="project in portfolio" 
                   :key="project.id" 
-                  :href="`#${project.id}`"
+                  :href="`${project.url}`"
                   class="block px-4 py-3 text-sm text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors"
                 >
                   {{ project.title }}
@@ -61,7 +61,7 @@
               <a 
                 v-for="project in portfolio" 
                 :key="project.id" 
-                :href="`#${project.id}`"
+                :href="`${project.url}`"
                 class="block text-slate-600 hover:text-primary"
                 @click="toggleMenu"
               >

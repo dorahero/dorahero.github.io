@@ -4,7 +4,7 @@ export const profile = {
     name: "Red Li",
     title: "創造數位體驗 連結未來科技",
     role: "全端工程師",
-    description: "從具備數學邏輯基礎的熱忱開發者，熱愛挑戰與學習新技術。",
+    description: "具備數學邏輯基礎的熱忱開發者，熱愛挑戰與學習新技術。",
     avatar: avatarImage,
     about: {
         title: "關於我",
@@ -96,7 +96,7 @@ export const experience = [
             '使用 Docker 部署 Scrapy 爬蟲，實現在樹莓派上自動抓取數據。',
             '利用 Tableau 呈現分析結果，提高數據解讀效率。',
             '使用 OpenCV 進行亮度調整、文字轉正、去雜點、拉開文字間距等處理。',
-            '實使用自訓練模型自動貼標，提升數據標註效率。'
+            '使用自訓練模型自動貼標，提升數據標註效率。'
         ],
         current: false,
     },
@@ -109,7 +109,7 @@ export const portfolio = [
         desc: '為金融客戶打造的數據視覺化儀表板，支援即時數據串接與圖表匯出功能。',
         image:
             'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        url: '',
+        url: 'https://dorahero.github.io/',
     },
 ];
 
