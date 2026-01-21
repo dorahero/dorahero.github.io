@@ -34,6 +34,18 @@ npm run dev
 ```
 啟動後即可在瀏覽器中預覽 (預設: `http://localhost:5173`)。
 
+### 📱 手機測試 (Mobile Testing)
+
+若要在手機上即時預覽：
+
+1. 確保手機與電腦連接至**同一個 Wi-Fi 網路**。
+2. 執行以下指令啟動伺服器：
+   ```bash
+   npm run dev -- --host
+   ```
+3. 查看終端機顯示的 `Network` 網址（例如 `http://192.168.x.x:5173/`）。
+4. 在手機瀏覽器輸入該網址即可預覽。
+
 ### 3. 建置生產版本
 
 ```bash
@@ -48,17 +60,19 @@ npm run build
 
 ## 📦 部署 (GitHub Pages)
 
-本專案已準備好部署至 GitHub Pages。
-請確保在 `vite.config.js` 中設定正確的 `base` 路徑：
+本專案已設定自動化部署腳本。
 
-```javascript
-export default defineConfig({
-  base: '/你的倉庫名稱/', // 修改這裡
-  plugins: [vue()],
-})
-```
+### 部署步驟
 
-然後執行建置並將 `dist` 資料夾推送至 `gh-pages` 分支。
+1. 確保所有變更已 commit。
+2. 執行部署指令：
+   ```bash
+   npm run deploy
+   ```
+   此指令會自動執行 `npm run build` 並將 `dist` 資料夾內容推送至遠端倉庫的 `gh-pages` 分支。
+3. 前往 GitHub Repository 的 **Settings > Pages**，確認 Source 設定為 `gh-pages` branch。
+
+> **注意**：若是部署到 Project Site (如 `username.github.io/repo-name`)，請確認 `vite.config.js` 中的 `base` 設定正確。若是部署到 User Site (`username.github.io`)，`base` 應保留為 `/`。
 
 ---
 &copy; 2026 MyResume. Built with Vue.js.
