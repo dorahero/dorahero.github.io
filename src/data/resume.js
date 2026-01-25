@@ -1,4 +1,6 @@
 import avatarImage from '../pic/me.jpeg';
+import resumePdfTw from '../pdf/Red_Tw.pdf';
+import resumePdfEng from '../pdf/Red_Eng.pdf';
 
 export const profile = {
     name: "Red Li",
@@ -104,12 +106,15 @@ export const experience = [
 
 export const portfolio = [
     {
-        id: 'enterprise-dashboard',
-        title: '旺宏分析系統 sNOVA',
-        desc: '為金融客戶打造的數據視覺化儀表板，支援即時數據串接與圖表匯出功能。',
+        id: 'resume-pdf',
+        title: '個人履歷',
+        desc: '個人履歷 PDF',
         image:
-            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        url: 'https://dorahero.github.io/',
+            '',
+        items: [
+            { title: '中文', url: resumePdfTw },
+            { title: 'English', url: resumePdfEng }
+        ]
     },
 ];
 

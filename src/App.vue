@@ -21,16 +21,46 @@
               小工具
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 transition-transform group-hover:rotate-180"><path d="m6 9 6 6 6-6"/></svg>
             </button>
-            <div class="absolute left-0 mt-0 w-56 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left z-50 overflow-hidden">
+            <div class="absolute left-0 mt-0 w-56 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left z-50">
                <div class="py-2">
-                <a 
-                  v-for="project in portfolio" 
-                  :key="project.id" 
-                  :href="`${project.url}`"
-                  class="block px-4 py-3 text-sm text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors"
-                >
-                  {{ project.title }}
-                </a>
+                <template v-for="project in portfolio" :key="project.id">
+                  <!-- 一般連結 (無子項目) -->
+                  <a 
+                    v-if="!project.items || project.items.length === 0"
+                    :href="project.url"
+                    class="block px-4 py-3 text-sm text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors"
+                  >
+                    {{ project.title }}
+                  </a>
+                  <!-- 單一子項目 (直接連結) -->
+                  <a 
+                    v-else-if="project.items.length === 1"
+                    :href="project.items[0].url"
+                    class="block px-4 py-3 text-sm text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors"
+                  >
+                    {{ project.title }}
+                  </a>
+                  <!-- 巢狀選單 (多個子項目) -->
+                  <div v-else class="group/nested relative">
+                    <button 
+                      class="w-full text-left flex items-center justify-between px-4 py-3 text-sm text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors"
+                    >
+                      {{ project.title }}
+                      <span class="text-xs">▶</span>
+                    </button>
+                    <!-- 子選單 -->
+                    <div class="absolute left-full top-0 w-32 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover/nested:opacity-100 group-hover/nested:visible transition-all duration-300 ml-2 overflow-hidden">
+                       <a 
+                        v-for="item in project.items" 
+                        :key="item.title"
+                        :href="item.url"
+                        class="block px-4 py-3 text-sm text-slate-600 hover:text-primary hover:bg-slate-50 transition-colors"
+                      >
+                        {{ item.title }}
+                      </a>
+                    </div>
+                  </div>
+                </template>
                </div>
             </div>
           </div>
@@ -58,15 +88,38 @@
           <div class="pt-2 border-t border-slate-100">
             <span class="block text-sm font-semibold text-slate-400 mb-2 px-2">小工具</span>
             <div class="pl-4 space-y-3">
-              <a 
-                v-for="project in portfolio" 
-                :key="project.id" 
-                :href="`${project.url}`"
-                class="block text-slate-600 hover:text-primary"
-                @click="toggleMenu"
-              >
-                {{ project.title }}
-              </a>
+              <template v-for="project in portfolio" :key="project.id">
+                <a 
+                  v-if="!project.items || project.items.length === 0"
+                  :href="project.url"
+                  class="block text-slate-600 hover:text-primary"
+                  @click="toggleMenu"
+                >
+                  {{ project.title }}
+                </a>
+                <a 
+                  v-else-if="project.items.length === 1"
+                  :href="project.items[0].url"
+                  class="block text-slate-600 hover:text-primary"
+                  @click="toggleMenu"
+                >
+                  {{ project.title }}
+                </a>
+                <div v-else class="space-y-2">
+                  <span class="block text-slate-600 font-medium">{{ project.title }}</span>
+                  <div class="pl-4 space-y-2 border-l border-slate-200 ml-1">
+                    <a 
+                      v-for="item in project.items" 
+                      :key="item.title"
+                      :href="item.url"
+                      class="block text-slate-500 hover:text-primary text-sm"
+                      @click="toggleMenu"
+                    >
+                      {{ item.title }}
+                    </a>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
         </div>
