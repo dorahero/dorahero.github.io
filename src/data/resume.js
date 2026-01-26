@@ -116,6 +116,16 @@ export const portfolio = [
             { title: 'English', url: resumePdfEng }
         ]
     },
+    {
+        id: 'air-quality-map',
+        title: '空氣品質地圖',
+        desc: '空氣品質地圖',
+        image:
+            '',
+        items: [
+            { title: '空氣品質地圖', url: '/air-quality-map' }
+        ]
+    },
 ];
 
 export const socialLinks = {
