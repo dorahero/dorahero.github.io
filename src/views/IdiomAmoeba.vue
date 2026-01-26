@@ -245,6 +245,7 @@ import idiomsCsv from '../data/idioms.csv?raw';
 const grid = reactive({}); // format: "x,y": { x, y, char, idiomId }
 const placedIdioms = ref([]);
 const idiomSet = ref(new Set());
+const commonIdiomSet = ref(new Set());
 const loading = ref(true);
 
 const inputIdiom = ref('');
@@ -328,8 +329,12 @@ const parseIdioms = () => {
         header: true,
         complete: (results) => {
             results.data.forEach(row => {
-                if (row['成語']) {
-                    idiomSet.value.add(row['成語'].trim());
+                const word = row['成語']?.trim();
+                if (word) {
+                    idiomSet.value.add(word);
+                    if (row['常用'] === 'true') {
+                        commonIdiomSet.value.add(word);
+                    }
                 }
             });
             initGame();
@@ -349,9 +354,13 @@ const initGame = () => {
     combo.value = 0;
     selectedDirectionIndex.value = 4; // Reset to Right
 
-    // Pick random start idiom
-    const idiomsArray = Array.from(idiomSet.value);
-    const randomIdiom = idiomsArray[Math.floor(Math.random() * idiomsArray.length)];
+    // Pick random start idiom from Common Idioms if available
+    let pool = Array.from(commonIdiomSet.value);
+    if (pool.length === 0) {
+        pool = Array.from(idiomSet.value);
+    }
+    
+    const randomIdiom = pool[Math.floor(Math.random() * pool.length)];
     
     // Initial placement is always Horizontal (Right) for simplicity
     placeIdiom(randomIdiom, 0, 0, 1, 0);
