@@ -126,6 +126,15 @@ export const portfolio = [
             { title: '空氣品質地圖', url: '/air-quality-map' }
         ]
     },
+    {
+        id: 'idiom-amoeba',
+        title: '成語阿米巴',
+        desc: '成語接龍小遊戲',
+        image: '',
+        items: [
+            { title: '成語阿米巴', url: '/idiom-amoeba' }
+        ]
+    },
 ];
 
 export const socialLinks = {

@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import IdiomAmoeba from '../views/IdiomAmoeba.vue'
 import Home from '../views/Home.vue'
 import AirQualityMap from '../views/AirQualityMap.vue'
 
@@ -12,6 +13,11 @@ const routes = [
         path: '/air-quality-map',
         name: 'AirQualityMap',
         component: AirQualityMap
+    },
+    {
+        path: '/idiom-amoeba',
+        name: 'IdiomAmoeba',
+        component: IdiomAmoeba
     }
 ]
 
