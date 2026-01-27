@@ -318,6 +318,16 @@
         {{ toast.message }}
     </div>
 
+    <!-- Combo Effect Overlay -->
+    <transition enter-active-class="transition duration-500 ease-out" enter-from-class="opacity-0 scale-50 -translate-x-full" enter-to-class="opacity-100 scale-100 translate-x-0" leave-active-class="transition duration-300 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
+        <div v-if="comboEffect.show" class="fixed top-24 left-4 z-[60] pointer-events-none">
+             <div class="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white font-black px-6 py-3 rounded-2xl shadow-xl transform -rotate-2 border-2 border-white outline outline-2 outline-orange-400 drop-shadow-lg text-center leading-tight">
+                 <div class="text-2xl font-bold filter drop-shadow-md">COMBO x{{ combo }}</div>
+                 <div class="text-xl text-yellow-100">{{ comboEffect.text }}</div>
+             </div>
+        </div>
+    </transition>
+
   </div>
 </template>
 
@@ -348,6 +358,7 @@ const modalLoading = ref(false);
 const modalData = ref([]);
 
 const toast = reactive({ show: false, message: '', type: 'info' });
+const comboEffect = reactive({ show: false, text: '' });
 
 // Help/Info
 const showHelpModal = ref(false);
@@ -594,6 +605,8 @@ const handleSuccess = (isHubExtension = false) => {
     if (isHubExtension) {
         comboInc = 2; // Extra Combo for same char extension
     }
+    
+    const oldCombo = combo.value;
     combo.value += comboInc;
     
     const points = 10 + (combo.value - 1) * 2;
@@ -604,6 +617,48 @@ const handleSuccess = (isHubExtension = false) => {
         : `接龍成功！ +${points}分 (Combo x${combo.value})`;
         
     showToast(msg, 'success');
+    
+    // Trigger Combo Effect
+    triggerComboEffect(combo.value, oldCombo);
+};
+
+const triggerComboEffect = (newVal, oldVal) => {
+    let text = '';
+    
+    // Check for milestone crossings
+    const milestones = [
+        { val: 5, text: "漸入佳境！" },
+        { val: 10, text: "勢如破竹！" },
+        { val: 20, text: "妙筆生花！" },
+        { val: 30, text: "登峰造極！" },
+        { val: 50, text: "成語之神！" }
+    ];
+    
+    // Check specific milestones
+    for (const m of milestones) {
+        if (oldVal < m.val && newVal >= m.val) {
+            text = m.text;
+            break; // Prioritize the lowest crossed milestone? Or highest? 
+            // Actually usually highest is better but if we jump 4->6 we want 5. 
+            // If we jump 9->11 we want 10.
+            // Since they are ordered asc, let's reverse to find highest crossed? 
+            // Or just finding 'a' milestone is enough.
+            // Let's stick to the list order. If I cross 5 and 10 at same time (impossible with +2), it would pick 5.
+        }
+    }
+    
+    // dynamic high score check
+    if (!text && newVal > 50 && newVal % 10 === 0 && newVal > oldVal) {
+         text = "絕世高手！";
+    }
+    
+    if (text) {
+        comboEffect.text = text;
+        comboEffect.show = true;
+        setTimeout(() => {
+            comboEffect.show = false;
+        }, 2000);
+    }
 };
 
 const handlePenalty = (reason) => {
