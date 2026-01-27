@@ -9,9 +9,17 @@
         <h1 class="text-xl font-bold text-slate-800">成語阿米巴</h1>
       </div>
       <div class="flex items-center gap-4">
-          <button @click="showHelpModal = true" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors" title="說明與成就">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-          </button>
+          <div class="flex items-center gap-2">
+              <button @click="showAboutModal = true" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors" title="關於我們">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              </button>
+              <button @click="showSettingsModal = true" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors" title="設定">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+              <button @click="showHelpModal = true" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors" title="說明與成就">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              </button>
+          </div>
           
           <div class="hidden md:flex flex-col items-end">
               <div class="text-sm text-slate-500 font-bold bg-slate-100 px-3 py-1 rounded-full">
@@ -80,8 +88,12 @@
                          <button 
                             v-else
                             @click="selectedDirectionIndex = (n > 5 ? n - 2 : n - 1)"
+                            :disabled="!isDirectionAllowed((n > 5 ? n - 2 : n - 1))"
                             class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-bold transition-all"
-                            :class="selectedDirectionIndex === (n > 5 ? n - 2 : n - 1) ? 'bg-primary text-white shadow-md' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'"
+                            :class="[
+                                selectedDirectionIndex === (n > 5 ? n - 2 : n - 1) ? 'bg-primary text-white shadow-md' : 'bg-slate-50 text-slate-400 hover:bg-slate-100',
+                                !isDirectionAllowed((n > 5 ? n - 2 : n - 1)) ? 'opacity-30 cursor-not-allowed hover:bg-slate-50' : ''
+                            ]"
                          >
                             {{ directions[(n > 5 ? n - 2 : n - 1)].label }}
                          </button>
@@ -121,6 +133,79 @@
             </div>
         </div>
     </div>
+
+    <!-- Settings Modal -->
+    <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+        <div v-if="showSettingsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" @click="showSettingsModal = false"></div>
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm relative z-10 p-6">
+                <button @click="showSettingsModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                
+                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    遊戲設定
+                </h2>
+                
+                <div class="space-y-4">
+                    <div 
+                        class="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors select-none"
+                        @click="allowAllDirections = !allowAllDirections"
+                    >
+                        <span class="font-medium text-slate-700">開啟八方填詞</span>
+                        <div class="relative w-12 h-6 transition-colors duration-200 ease-in-out rounded-full" :class="allowAllDirections ? 'bg-primary' : 'bg-slate-300'">
+                            <div 
+                                class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow transform transition-transform duration-200 ease-in-out"
+                                :class="allowAllDirections ? 'translate-x-6' : 'translate-x-0'"
+                            ></div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 px-1">
+                        開啟後，可以向八個方向（包含左、上、斜向）進行接龍。
+                        <br>未開啟時僅限：右 (→)、下 (↓)、右下 (↘)。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </transition>
+
+    <!-- About Modal -->
+    <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+        <div v-if="showAboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" @click="showAboutModal = false"></div>
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm relative z-10 p-6">
+                <button @click="showAboutModal = false" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+                
+                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    關於本遊戲
+                </h2>
+                
+                <div class="space-y-6">
+                    <section>
+                         <h3 class="font-bold text-slate-700 mb-2 border-b pb-1">👨‍💻 發明者介紹</h3>
+                         <p class="text-slate-600 text-sm leading-relaxed">
+                            李錫榕（大同國中國文老師）是「成語阿米巴」遊戲的發明者。他靈感源自求學時期對高醫「阿米巴詩社」的印象，並結合阿米巴原蟲分裂變形的生物特性，設計出這套有別於傳統接龍的教學活動。李老師指出，此遊戲打破了「首尾相接」的限制，允許從成語中的任一字靈活發散聯想，過程如同變形蟲般在黑板上不斷分裂、延伸，更能激發學生的創意與靈活性。
+                         </p>
+                    </section>
+                    
+                    <section>
+                         <h3 class="font-bold text-slate-700 mb-2 border-b pb-1">📚 資料來源</h3>
+                         <p class="text-slate-600 text-sm leading-relaxed">
+                            本遊戲之成語資料，主要引用自 <a href="https://language.moe.gov.tw/" target="_blank" class="text-primary hover:underline">教育部成語典</a>.
+                         </p>
+                    </section>
+                    
+                    <div class="pt-4 text-center text-xs text-slate-400">
+                        v1.0.0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
 
     <!-- Help/Achievement Modal -->
     <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
@@ -237,7 +322,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, reactive } from 'vue';
+import { ref, computed, onMounted, reactive, watch } from 'vue';
 import Papa from 'papaparse';
 import idiomsCsv from '../data/idioms.csv?raw';
 
@@ -266,6 +351,9 @@ const toast = reactive({ show: false, message: '', type: 'info' });
 
 // Help/Info
 const showHelpModal = ref(false);
+const showSettingsModal = ref(false);
+const showAboutModal = ref(false);
+const allowAllDirections = ref(false);
 
 // Scoring System
 const score = ref(0);
@@ -300,14 +388,29 @@ const directions = [
     { label: '←', dx: -1, dy: 0 },                               { label: '→', dx: 1, dy: 0 },
     { label: '↙', dx: -1, dy: 1 }, { label: '↓', dx: 0, dy: 1 }, { label: '↘', dx: 1, dy: 1 }
 ];
-const selectedDirectionIndex = ref(4); // Default to Right (index 4 in array above? No, let's fix logic)
+const selectedDirectionIndex = ref(6); // Default to Down (index 6)
 // Let's use specific indices for clarity or finding by values.
 // Array indices:
 // 0(NW) 1(N) 2(NE)
 // 3(W)       4(E)
 // 5(SW) 6(S) 7(SE)
 // Actually standard reading order: 
+// 5(SW) 6(S) 7(SE)
+// Actually standard reading order: 
 // 4 is East (Right), standard default.
+// Allowed defaults: Right(4), Down(6), SE(7)
+
+const isDirectionAllowed = (index) => {
+    if (allowAllDirections.value) return true;
+    return [4, 6, 7].includes(index);
+};
+
+watch(allowAllDirections, (newVal) => {
+    // If turning off, and current direction is invalid, reset to Right (4)
+    if (!newVal && !isDirectionAllowed(selectedDirectionIndex.value)) {
+        selectedDirectionIndex.value = 6;
+    }
+});
 
 const currentDirection = computed(() => directions[selectedDirectionIndex.value]);
 
@@ -352,7 +455,8 @@ const initGame = () => {
     pan.y = 0;
     score.value = 0;
     combo.value = 0;
-    selectedDirectionIndex.value = 4; // Reset to Right
+    selectedDirectionIndex.value = 6; // Reset to Down
+    allowAllDirections.value = false; // Reset settings on new game? Optional. user didn't specify. Let's keep it persistent might be better, but user said "Default unchecked". Let's assume on reload/init it defaults to false. Resetting here enforces "Default unchecked" on restart.
 
     // Pick random start idiom from Common Idioms if available
     let pool = Array.from(commonIdiomSet.value);
@@ -382,7 +486,14 @@ const placeIdiom = (word, startX, startY, dx, dy) => {
     }
 
     newCells.forEach(cell => {
-        grid[`${cell.x},${cell.y}`] = cell;
+        const key = `${cell.x},${cell.y}`;
+        if (grid[key]) {
+            // Inherit existing connection count and increment
+            cell.connectionCount = (grid[key].connectionCount || 1) + 1;
+        } else {
+            cell.connectionCount = 1;
+        }
+        grid[key] = cell;
     });
     
     placedIdioms.value.push({ word, cells: newCells });
@@ -423,7 +534,7 @@ const handleCellDblClick = async (x, y) => {
 const submitIdiom = () => {
     if (!isValidInput.value) {
         showToast('輸入格式不正確', 'error');
-        handlePenalty("格式錯誤");
+        // No penalty for format error
         return;
     }
     
@@ -432,7 +543,7 @@ const submitIdiom = () => {
     const isAlreadyPlaced = placedIdioms.value.some(p => p.word === word);
     if (isAlreadyPlaced) {
          showToast('這個成語已經用過了！', 'error');
-         handlePenalty("重複成語");
+         // No penalty for duplicate
          return;
     }
     
@@ -459,27 +570,40 @@ const submitIdiom = () => {
     // Collision Detection
     if (!checkCanPlace(word, startX, startY, dx, dy)) {
         showToast('位置有衝突，無法放置！', 'error');
-        handlePenalty("位置衝突");
+        // No penalty for collision
         return;
     }
     
     // --- Success ---
     placeIdiom(word, startX, startY, dx, dy);
     
+    // Check for Hub Extension (Same Char Extension)
+    // If connection count is > 2, it means it was already connected (2) and now is (3+), so it's a re-extension
+    const isHubExtension = grid[selectedKey.value]?.connectionCount > 2;
+
     // Score Calculation
-    handleSuccess();
+    handleSuccess(isHubExtension);
     
     // Reset selection
     selectedKey.value = null;
     inputIdiom.value = '';
 };
 
-const handleSuccess = () => {
-    combo.value++;
+const handleSuccess = (isHubExtension = false) => {
+    let comboInc = 1;
+    if (isHubExtension) {
+        comboInc = 2; // Extra Combo for same char extension
+    }
+    combo.value += comboInc;
+    
     const points = 10 + (combo.value - 1) * 2;
     score.value += points;
     
-    showToast(`接龍成功！ +${points}分 (Combo x${combo.value})`, 'success');
+    const msg = isHubExtension 
+        ? `同字延伸！Combo x${comboInc}！ +${points}分` 
+        : `接龍成功！ +${points}分 (Combo x${combo.value})`;
+        
+    showToast(msg, 'success');
 };
 
 const handlePenalty = (reason) => {
@@ -595,5 +719,8 @@ const showToast = (msg, type = 'info') => {
 .bg-slate-50 {
     background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
     background-size: 20px 20px;
+}
+.toggle-label {
+    transition: all 0.3s;
 }
 </style>
