@@ -585,6 +585,14 @@ const submitIdiom = () => {
         return;
     }
     
+    // Calculate overlap count
+    let overlapCount = 0;
+    for (let i = 0; i < word.length; i++) {
+        const x = startX + (i * dx);
+        const y = startY + (i * dy);
+        if (grid[`${x},${y}`]) overlapCount++;
+    }
+
     // --- Success ---
     placeIdiom(word, startX, startY, dx, dy);
     
@@ -593,14 +601,14 @@ const submitIdiom = () => {
     const isHubExtension = grid[selectedKey.value]?.connectionCount > 2;
 
     // Score Calculation
-    handleSuccess(isHubExtension);
+    handleSuccess(isHubExtension, overlapCount);
     
     // Reset selection
     selectedKey.value = null;
     inputIdiom.value = '';
 };
 
-const handleSuccess = (isHubExtension = false) => {
+const handleSuccess = (isHubExtension = false, overlapCount = 1) => {
     let comboInc = 1;
     if (isHubExtension) {
         comboInc = 2; // Extra Combo for same char extension
@@ -609,12 +617,22 @@ const handleSuccess = (isHubExtension = false) => {
     const oldCombo = combo.value;
     combo.value += comboInc;
     
-    const points = 10 + (combo.value - 1) * 2;
-    score.value += points;
+    let points = 10 + (combo.value - 1) * 2;
     
-    const msg = isHubExtension 
-        ? `同字延伸！Combo x${comboInc}！ +${points}分` 
-        : `接龍成功！ +${points}分 (Combo x${combo.value})`;
+    // Bonus: Overlap >= 2
+    let bonus = 0;
+    if (overlapCount >= 2) {
+        bonus = (overlapCount - 1) * 30;
+    }
+    
+    const totalPoints = points + bonus;
+    score.value += totalPoints;
+    
+    let msg = isHubExtension ? `同字延伸！Combo x${comboInc}！` : `接龍成功！`;
+    msg += ` +${totalPoints}分`;
+    
+    if (bonus > 0) msg += ` (多字加分)`;
+    if (!isHubExtension) msg += ` (Combo x${combo.value})`;
         
     showToast(msg, 'success');
     
