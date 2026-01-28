@@ -212,88 +212,37 @@ const fetchData = async () => {
     loading.value = true;
     error.value = null;
     
-    // In strict environments, direct fetch to leetcode.com will fail due to CORS.
-    // If running in development with proxy, or if the user has a way to bypass it.
-    // I will try to fetch directly first as requested.
-    
-    // Note: If this is deployed on GitHub Pages, this will 99% fail without a proxy.
-    // But I must follow user instructions.
+    // Use a public proxy that handles CORS and providing stats in a simple JSON format.
+    // Source: https://leetcode-stats-api.herokuapp.com/
+    const apiUrl = `https://leetcode-stats-api.herokuapp.com/${username}`;
     
     try {
-        const query = `
-        query userProblemsSolved($username: String!) { 
-            allQuestionsCount { difficulty count } 
-            matchedUser(username: $username) { 
-                submitStats { 
-                    acSubmissionNum { difficulty count } 
-                } 
-            } 
-        }`;
-        
-        const variables = { username };
-        
-        // Try to fetch via a common proxy if direct fail? Or just direct.
-        // Let's assume for now we might need a proxy path if configured in vite.config.js
-        // If I configure proxy, the URL should be relative.
-        // I will use exact URL provided by user in prompt logic, but maybe try to route through proxy
-        // if local.
-        
-        // Use proxy in development to avoid CORS, direct URL in production
-        const apiUrl = import.meta.env.DEV ? '/leetcode-api/graphql' : 'https://leetcode.com/graphql';
-        
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ query, variables })
-        });
+        const response = await fetch(apiUrl);
         
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const result = await response.json();
         
-        if (result.errors) {
-            throw new Error(result.errors[0].message);
+        if (result.status === 'error') {
+            throw new Error(result.message || 'Error fetching data');
         }
         
-        const allCounts = result.data.allQuestionsCount;
-        const solvedCounts = result.data.matchedUser.submitStats.acSubmissionNum;
-        
-        // Process data
-        const getCount = (arr, diff) => arr.find(i => i.difficulty === diff)?.count || 0;
-        
+        // Map the API response to our stats structure
         stats.value = {
-            totalSolved: getCount(solvedCounts, 'All'),
-            totalQuestions: getCount(allCounts, 'All'),
+            totalSolved: result.totalSolved,
+            totalQuestions: result.totalQuestions,
             breakdown: [
-                { difficulty: 'Easy', solved: getCount(solvedCounts, 'Easy'), total: getCount(allCounts, 'Easy') },
-                { difficulty: 'Medium', solved: getCount(solvedCounts, 'Medium'), total: getCount(allCounts, 'Medium') },
-                { difficulty: 'Hard', solved: getCount(solvedCounts, 'Hard'), total: getCount(allCounts, 'Hard') }
+                { difficulty: 'Easy', solved: result.easySolved, total: result.totalEasy },
+                { difficulty: 'Medium', solved: result.mediumSolved, total: result.totalMedium },
+                { difficulty: 'Hard', solved: result.hardSolved, total: result.totalHard }
             ]
         };
 
     } catch (err) {
         console.error("LeetCode Fetch Error:", err);
-        // Fallback or Mock data for demonstration if fetch fails (due to CORS likely)
-        // error.value = "Failed to load data. Please checks console for CORS errors. (Showing mock data for preview)";
-        // For now, show real error message but maybe offer mock?
-        error.value = "無法載入資料 (可能遭遇跨網域存取限制 CORS)。詳細錯誤：" + err.message;
-        
-        // Useful fallback for preview purposes (Remove in production if strictly dynamic)
-        // stats.value = {
-        //     totalSolved: 67,
-        //     totalQuestions: 3822,
-        //     breakdown: [
-        //         { difficulty: 'Easy', solved: 13, total: 922 },
-        //         { difficulty: 'Medium', solved: 54, total: 1997 },
-        //         { difficulty: 'Hard', solved: 0, total: 903 }
-        //     ]
-        // };
-        // loading.value = false;
-        // return; 
+        error.value = "無法載入資料 (API 連線錯誤 或 CORS 限制)。詳細錯誤：" + err.message;
     } finally {
         loading.value = false;
     }
