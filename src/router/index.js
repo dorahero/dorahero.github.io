@@ -2,22 +2,32 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import IdiomAmoeba from '../views/IdiomAmoeba.vue'
 import Home from '../views/Home.vue'
 import AirQualityMap from '../views/AirQualityMap.vue'
+import LeetCodeStats from '../views/LeetCodeStats.vue'
 
 const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home
+        component: Home,
+        meta: { title: '個人履歷 | Red' }
     },
     {
         path: '/air-quality-map',
         name: 'AirQualityMap',
-        component: AirQualityMap
+        component: AirQualityMap,
+        meta: { title: '空氣品質地圖 | Red' }
     },
     {
         path: '/idiom-amoeba',
         name: 'IdiomAmoeba',
-        component: IdiomAmoeba
+        component: IdiomAmoeba,
+        meta: { title: '成語阿米巴 | Red' }
+    },
+    {
+        path: '/leetcode-stats',
+        name: 'LeetCodeStats',
+        component: LeetCodeStats,
+        meta: { title: 'LeetCode 刷題進度 | Red' }
     }
 ]
 
@@ -32,6 +42,14 @@ const router = createRouter({
             }
         }
         return { top: 0 }
+    }
+})
+
+router.afterEach((to) => {
+    if (to.meta.title) {
+        document.title = to.meta.title
+    } else {
+        document.title = 'Red'
     }
 })
 
