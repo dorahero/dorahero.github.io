@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-screen bg-slate-50 relative overflow-hidden flex flex-col font-sans">
+  <div class="w-full h-[100dvh] bg-slate-50 relative overflow-hidden flex flex-col font-sans">
     <!-- Header -->
     <header class="absolute top-0 left-0 w-full z-10 bg-white/90 backdrop-blur-md shadow-sm px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-4">
