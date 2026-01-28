@@ -30,71 +30,98 @@
         <!-- Content -->
         <div v-else-if="stats" class="space-y-8 fade-in-up">
           <!-- Main Stats Card -->
-          <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 p-8">
-            <div class="flex flex-col md:flex-row items-center gap-12">
+          <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 p-8 max-w-2xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-16">
+              
               <!-- Circular Progress -->
-              <div class="relative w-48 h-48 flex-shrink-0">
+              <div class="relative w-56 h-56 flex-shrink-0">
                  <svg class="w-full h-full transform -rotate-90">
                     <!-- Background Circle -->
                     <circle
-                      cx="96"
-                      cy="96"
-                      r="88"
+                      cx="112"
+                      cy="112"
+                      r="100"
                       stroke="currentColor"
-                      stroke-width="12"
+                      stroke-width="8"
                       fill="transparent"
                       class="text-slate-100"
                     />
                     <!-- Segments -->
+                    <!-- Background Segments -->
                     <circle
-                      v-for="segment in ringSegments"
-                      :key="segment.difficulty"
-                      cx="96"
-                      cy="96"
-                      r="88"
+                      v-for="segment in chartData.bg"
+                      :key="'bg-' + segment.difficulty"
+                      cx="112"
+                      cy="112"
+                      r="100"
                       stroke="currentColor"
-                      stroke-width="12"
+                      stroke-width="8"
                       fill="transparent"
+                      stroke-linecap="round" 
                       :stroke-dasharray="circumference"
                       :stroke-dashoffset="circumference - segment.length"
                       :class="segment.colorClass"
                       class="transition-all duration-1000 ease-out"
-                      :style="{ transform: `rotate(${segment.rotation}deg)`, transformOrigin: 'center' }"
+                      :style="{ 
+                        transform: `rotate(${segment.rotation}deg)`, 
+                        transformOrigin: '112px 112px' 
+                      }"
+                    />
+                    
+                    <!-- Foreground Segments (Solved) -->
+                    <circle
+                      v-for="segment in chartData.fg"
+                      :key="'fg-' + segment.difficulty"
+                      cx="112"
+                      cy="112"
+                      r="100"
+                      stroke="currentColor"
+                      stroke-width="8"
+                      fill="transparent"
+                      stroke-linecap="round" 
+                      :stroke-dasharray="circumference"
+                      :stroke-dashoffset="circumference - segment.length"
+                      :class="segment.colorClass"
+                      class="transition-all duration-1000 ease-out"
+                      :style="{ 
+                        transform: `rotate(${segment.rotation}deg)`, 
+                        transformOrigin: '112px 112px' 
+                      }"
                     />
                  </svg>
                  <div class="absolute inset-0 flex flex-col items-center justify-center">
-                    <span class="text-4xl font-bold text-slate-800">{{ stats.totalSolved }}</span>
-                    <span class="text-sm text-slate-500">Solved</span>
+                    <div class="flex items-baseline">
+                        <span class="text-5xl font-bold text-slate-800">{{ stats.totalSolved }}</span>
+                        <span class="text-xl text-slate-400 font-medium ml-1">/{{ stats.totalQuestions }}</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-1 mt-2 text-green-600 bg-green-50 px-3 py-1 rounded-full">
+                        <CheckCircle class="w-4 h-4" />
+                        <span class="text-sm font-semibold">Solved</span>
+                    </div>
                  </div>
               </div>
 
-              <!-- Breakdown -->
-              <div class="flex-1 w-full space-y-6">
-                <div v-for="item in stats.breakdown" :key="item.difficulty" class="space-y-2">
-                  <div class="flex justify-between items-end">
-                    <span class="font-medium text-slate-700" :class="difficultyColorText(item.difficulty)">{{ item.difficulty }}</span>
-                    <div class="text-sm text-slate-500">
-                      <span class="font-bold text-slate-800">{{ item.solved }}</span>
-                      <span class="mx-1">/</span>
-                      <span>{{ item.total }}</span>
+              <!-- Breakdown Legend -->
+              <div class="grid grid-cols-3 gap-2 w-full md:flex md:flex-col md:gap-4 md:w-48">
+                <div v-for="item in stats.breakdown" :key="item.difficulty" 
+                     class="group flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-300 hover:shadow-md border border-transparent hover:border-slate-200"
+                     :class="difficultyBgHover(item.difficulty)">
+                    
+                    <span class="text-sm font-medium mb-1" :class="difficultyColorText(item.difficulty)">
+                        {{ item.difficulty }}
+                    </span>
+                    <div class="text-slate-700 font-semibold text-lg">
+                        {{ item.solved }}
+                        <span class="text-slate-400 text-sm font-normal">/{{ item.total }}</span>
                     </div>
-                  </div>
-                  <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
-                    <div
-                      class="h-full rounded-full transition-all duration-1000 ease-out"
-                      :class="difficultyColorBg(item.difficulty)"
-                      :style="{ width: (item.solved / item.total) * 100 + '%' }"
-                    ></div>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
           
-           <!-- User Info Card (Optional if needed, reusing profile data maybe?) -->
-             <!-- Since the API provides easy/medium/hard, that's what we show. -->
-             
-             <div class="text-center text-slate-400 text-sm mt-12">
+           <!-- Footer Info -->
+             <div class="text-center text-slate-400 text-sm mt-8">
                 Data source: LeetCode ({{ username }})
              </div>
 
@@ -106,106 +133,114 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { ArrowLeft } from 'lucide-vue-next';
+import { ArrowLeft, CheckCircle } from 'lucide-vue-next';
 
 const username = "dorahero2727";
 const loading = ref(true);
 const error = ref(null);
 const stats = ref(null);
 
-const circumference = 2 * Math.PI * 88;
+// Radius = 100
+const circumference = 2 * Math.PI * 100;
 
 const difficultyColorText = (diff) => {
     switch(diff) {
-        case 'Easy': return 'text-green-600';
-        case 'Medium': return 'text-yellow-600';
-        case 'Hard': return 'text-red-600';
+        case 'Easy': return 'text-[rgb(0,184,163)]'; // LeetCode Teal
+        case 'Medium': return 'text-[rgb(255,192,30)]'; // LeetCode Yellow
+        case 'Hard': return 'text-[rgb(255,55,95)]'; // LeetCode Red
         default: return 'text-slate-600';
     }
 };
 
-const difficultyColorBg = (diff) => {
-    switch(diff) {
-        case 'Easy': return 'bg-green-500';
-        case 'Medium': return 'bg-yellow-500';
-        case 'Hard': return 'bg-red-500';
-        default: return 'bg-slate-500';
+const difficultyBgHover = (diff) => {
+     switch(diff) {
+        case 'Easy': return 'hover:bg-teal-50/50';
+        case 'Medium': return 'hover:bg-yellow-50/50';
+        case 'Hard': return 'hover:bg-red-50/50';
+        default: return 'hover:bg-slate-50';
     }
-};
+}
 
-const ringSegments = computed(() => {
-    if (!stats.value) return [];
-    
-    // Calculate raw lengths relative to circumference
-    // Note: The denominator here is totalQuestions (all available questions on LC), 
-    // so the ring represents "coverage of all LeetCode questions".
-    // If we want the ring to be full (100%) and just show distribution of solved, 
-    // we would use totalSolved as denominator.
-    // However, usually these graphs show progress.
-    // Based on previous implementation, it was progress.
-    
-    // WAIT: The standard LeetCode profile ring:
-    // Outer grey ring = Total Questions.
-    // Inner Colored arc = Solved Questions.
-    // The Colored arc consists of 3 colors stacked.
-    
-    // My Implementation:
-    // Background: Grey (Full circle)
-    // Segment 1 (Easy): Green arc. Length = (SolvedEasy / TotalQuestions) * C
-    // Segment 2 (Medium): Yellow arc. Length = (SolvedMedium / TotalQuestions) * C. 
-    //                     But it must start AFTER Segment 1.
-    // Segment 3 (Hard): Red arc. Length = (SolvedHard / TotalQuestions) * C.
-    //                   Starts AFTER Segment 2.
-    
-    const totalQ = stats.value.totalQuestions;
-    if (totalQ === 0) return [];
+const segmentGap = 2; // Gap between difficulty segments in degrees
 
-    let currentRotation = 0; // Start at top (which is -90 via parent SVG transform, so internal 0 is fine if we add to it? NO.)
-    // SVG transform on parent is -90. So 0 degrees is 12 o'clock.
-    // If I rotate inner circles, they rotate relative to that?
-    // Wait, <svg class="transform -rotate-90"> rotates the VIEWPORT.
-    // So 0,0 is still top-left but visual is rotated?
-    // Actually <svg> rotation rotates the coordinate system relative to container.
-    // Inside, cx/cy are absolute.
-    // If I put `transform: rotate(Ndeg)` on a circle with `transform-origin: center`, it rotates around center.
-    // Since parent SVG is rotated -90, a circle with rotation 0 starts at 12 o'clock visual.
-    // So 'currentRotation' starts at 0.
+const chartData = computed(() => {
+    if (!stats.value) return { bg: [], fg: [] };
     
-    const segments = [];
+    // Total Questions (Easy + Medium + Hard)
+    // Note: stats.totalQuestions from API might include others? 
+    // Best to sum the breakdowns to be safe and consistent with the ring.
+    // Or just use the API total. 
+    // Let's use the sum of the breakdown totals to ensure the ring is exactly 100%.
+    const totalQ = stats.value.breakdown.reduce((acc, item) => acc + item.total, 0);
     
-    const breakdowns = stats.value.breakdown; // Easy, Medium, Hard order
-    // Order matters for stacking? Not really if they don't overlap.
-    // But we want them sequential.
+    if (totalQ === 0) return { bg: [], fg: [] };
+
+    let currentRotation = 240; 
+    const bgSegments = [];
+    const fgSegments = [];
     
-    // Map text color class to stroke text color class?
-    // text-green-600 -> text-green-500 for stroke? 
-    // Usually stroke uses 'text-current' so we apply a text class like 'text-green-500'.
-    
-    const getColorClass = (diff) => {
+    const getColorConfig = (diff) => {
         switch(diff) {
-            case 'Easy': return 'text-green-500';
-            case 'Medium': return 'text-yellow-500';
-            case 'Hard': return 'text-red-500';
-            default: return 'text-slate-500';
+            case 'Easy': return { text: 'text-[rgb(0,184,163)]', bg: 'text-[rgba(0,184,163,0.2)]' }; // Teal
+            case 'Medium': return { text: 'text-[rgb(255,192,30)]', bg: 'text-[rgba(255,192,30,0.2)]' }; // Yellow
+            case 'Hard': return { text: 'text-[rgb(255,55,95)]', bg: 'text-[rgba(255,55,95,0.2)]' }; // Red
+            default: return { text: 'text-slate-500', bg: 'text-slate-100' };
         }
     };
     
-    for (const item of breakdowns) {
-        const ratio = item.solved / totalQ;
-        const length = circumference * ratio;
-        const degrees = ratio * 360;
+    // We iterate Easy -> Medium -> Hard
+    for (const item of stats.value.breakdown) {
+        // Calculate shares
+        // User requested EQUAL segments (3 segments -> 1/3 each)
+        // const totalShare = item.total / totalQ; // Proportional
+        const totalShare = 1 / 3; // Equal
         
-        segments.push({
+        // Calculate angles (in degrees)
+        // Subtract gap from the visual length if possible, or just add rotation gap.
+        // Let's just rotate with gaps. 
+        // Actual degree span for this Difficulty Block:
+        const blockDegrees = totalShare * 360;
+        
+        // Visual Background Arc
+        // We want a gap. So we shrink the arc slightly? 
+        // Or we just advance rotation by blockDegrees but draw (blockDegrees - gap).
+        const drawDegrees = Math.max(0, blockDegrees - segmentGap);
+        const bgLength = (drawDegrees / 360) * circumference;
+        
+        // Foreground Arc (Progress)
+        // Scale the solved share to the DRAWN block size? 
+        // Or is solved strictly proportional to TotalQ? 
+        // Solved MUST be inside the Bg Arc.
+        // Solved Fraction of THIS block = solved / total.
+        // So visual solved degrees = (solved/total) * drawDegrees.
+        const solvedRatioInBlock = item.total > 0 ? (item.solved / item.total) : 0;
+        const solvedDrawDegrees = solvedRatioInBlock * drawDegrees;
+        const fgLength = (solvedDrawDegrees / 360) * circumference;
+        
+        const colors = getColorConfig(item.difficulty);
+        
+        // Background Segment
+        bgSegments.push({
             difficulty: item.difficulty,
-            length: length,
-            rotation: currentRotation, // Relative to the container which is already rotated -90
-            colorClass: getColorClass(item.difficulty)
+            length: bgLength,
+            rotation: currentRotation + (segmentGap / 2),
+            colorClass: colors.bg
         });
         
-        currentRotation += degrees;
+        // Foreground Segment
+        if (fgLength > 0) {
+            fgSegments.push({
+                difficulty: item.difficulty,
+                length: fgLength,
+                rotation: currentRotation + (segmentGap / 2),
+                colorClass: colors.text
+            });
+        }
+        
+        currentRotation += blockDegrees;
     }
     
-    return segments;
+    return { bg: bgSegments, fg: fgSegments };
 });
 
 const fetchData = async () => {
