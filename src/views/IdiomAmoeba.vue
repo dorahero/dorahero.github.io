@@ -42,6 +42,7 @@
         class="flex-1 w-full h-full cursor-grab active:cursor-grabbing relative"
         @mousedown="startDrag"
         @touchstart="startDrag"
+        @wheel.prevent="handleWheel"
     >
         <div 
             class="absolute top-1/2 left-1/2 transition-transform duration-75 origin-center will-change-transform"
@@ -132,6 +133,19 @@
                 點選一個字來開始接龍
             </div>
         </div>
+    </div>
+
+    <!-- Zoom Controls -->
+    <div class="absolute bottom-8 right-6 z-20 flex flex-col gap-2">
+        <button @click="zoomIn" class="w-10 h-10 bg-white rounded-full shadow-lg border border-slate-200 text-slate-600 flex items-center justify-center hover:bg-slate-50 transition-colors" title="放大">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <button @click="resetZoom" class="w-10 h-10 bg-white rounded-full shadow-lg border border-slate-200 text-slate-600 flex items-center justify-center hover:bg-slate-50 transition-colors text-xs font-bold" title="重置縮放">
+            {{ Math.round(scale * 100) }}%
+        </button>
+        <button @click="zoomOut" class="w-10 h-10 bg-white rounded-full shadow-lg border border-slate-200 text-slate-600 flex items-center justify-center hover:bg-slate-50 transition-colors" title="縮小">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
     </div>
 
     <!-- Settings Modal -->
@@ -479,6 +493,13 @@ const initGame = () => {
     
     // Initial placement is always Horizontal (Right) for simplicity
     placeIdiom(randomIdiom, 0, 0, 1, 0);
+
+    // Center the view on the initial idiom
+    // Center point in pixels relative to (0,0)
+    // Formula: -1 * ((length - 1) * CELL_SIZE) / 2
+    const centerPixelX = ((randomIdiom.length - 1) * 52) / 2;
+    pan.x = -centerPixelX;
+    pan.y = 0;
 };
 
 const resetGame = () => initGame();
@@ -742,6 +763,31 @@ const stopDrag = () => {
     window.removeEventListener('mouseup', stopDrag);
     window.removeEventListener('touchmove', onDrag);
     window.removeEventListener('touchend', stopDrag);
+};
+
+
+// --- Zoom Logic ---
+const MIN_SCALE = 0.5;
+const MAX_SCALE = 2.0;
+
+const handleWheel = (e) => {
+    // Zoom sensitivity
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    updateScale(delta);
+};
+
+const zoomIn = () => updateScale(0.1);
+const zoomOut = () => updateScale(-0.1);
+
+const updateScale = (delta) => {
+    const newScale = Math.min(Math.max(scale.value + delta, MIN_SCALE), MAX_SCALE);
+    scale.value = Math.round(newScale * 10) / 10; // Round to 1 decimal place to avoid float artifacts
+};
+
+const resetZoom = () => {
+    scale.value = 1;
+    pan.x = 0;
+    pan.y = 0;
 };
 
 
