@@ -4100,7 +4100,7 @@
 兩部鼓吹,false
 兩重人格,false
 兩難論證,false
-兩面三刀,true
+兩面三刀,false
 兩面二舌,false
 兩面轉圜,false
 兩面顧全,false
@@ -5581,7 +5581,7 @@
 北非諜影,false
 北面稱臣,false
 匠心獨具,false
-匠心獨運,true
+匠心獨運,false
 匠石斫鼻,false
 匠石運斤,false
 匡亂反正,false
@@ -7323,7 +7323,7 @@
 喜氣洋洋,false
 喜眉笑眼,false
 喜笑顏開,false
-喜聞樂見,true
+喜聞樂見,false
 喜躍抃舞,false
 喜逐顏開,false
 喜鵲叫吉,false
@@ -20826,7 +20826,7 @@
 涇渭不分,false
 涇渭不雜,false
 涇渭了然,false
-涇渭分明,true
+涇渭分明,false
 涇渭斯明,false
 涇渭自分,false
 涇渭自明,false
@@ -22912,7 +22912,7 @@
 獨排眾議,false
 獨擅勝場,false
 獨斷專行,false
-獨斷獨行,true
+獨斷獨行,false
 獨木不林,false
 獨木難支,false
 獨根孤種,false
@@ -22937,7 +22937,7 @@
 獨門獨院,false
 獨門絕活,false
 獨開生面,false
-獨闢蹊徑,true
+獨闢蹊徑,false
 獨霸一方,false
 獨領風騷,false
 獲利倍蓰,false
@@ -26113,7 +26113,7 @@
 穿金戴銀,false
 穿針引線,false
 穿鑿傅會,false
-穿鑿附會,true
+穿鑿附會,false
 穿雲裂石,false
 穿靴戴帽,false
 穿麻掛孝,false
@@ -27656,7 +27656,7 @@
 義山恩海,false
 義形於色,false
 義憤填胸,false
-義憤填膺,true
+義憤填膺,false
 義斷恩絕,false
 義方之訓,false
 義方是訓,false
@@ -28408,7 +28408,7 @@
 腰椎穿刺,false
 腰粗氣豪,false
 腰纏十萬,false
-腰纏萬貫,true
+腰纏萬貫,false
 腰金拖紫,false
 腰金紫綬,false
 腰金衣紫,false
@@ -35236,7 +35236,7 @@
 離情依依,false
 離情別緒,false
 離瓣花冠,false
-離經叛道,true
+離經叛道,false
 離線作業,false
 離群索居,false
 離鄉別井,false
@@ -36488,7 +36488,7 @@
 飢渴交迫,false
 飢火中焚,false
 飢火燒腸,false
-飢腸轆轆,true
+飢腸轆轆,false
 飢虎撲食,false
 飢附飽颺,false
 飢餐渴飲,false
@@ -37303,7 +37303,7 @@
 魚鱗圖冊,false
 魚鼓簡板,false
 魚鼓道情,false
-魚龍混雜,true
+魚龍混雜,false
 魚龍漫衍,false
 魚龍變化,false
 魯女憂葵,false
