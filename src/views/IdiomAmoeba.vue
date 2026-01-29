@@ -10,6 +10,9 @@
       </div>
       <div class="flex items-center gap-4">
           <div class="flex items-center gap-2">
+              <button @click="reloadPage" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors" title="重新整理">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+              </button>
               <button @click="showAboutModal = true" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors" title="關於我們">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               </button>
@@ -39,7 +42,7 @@
     <!-- Game Canvas -->
     <div 
         ref="canvasRef"
-        class="flex-1 w-full h-full cursor-grab active:cursor-grabbing relative"
+        class="flex-1 w-full h-full cursor-grab active:cursor-grabbing relative touch-none"
         @mousedown="startDrag"
         @touchstart="startDrag"
         @wheel.prevent="handleWheel"
@@ -788,6 +791,10 @@ const resetZoom = () => {
     scale.value = 1;
     pan.x = 0;
     pan.y = 0;
+};
+
+const reloadPage = () => {
+    window.location.reload();
 };
 
 
