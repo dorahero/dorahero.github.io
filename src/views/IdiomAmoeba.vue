@@ -2,11 +2,11 @@
   <div class="w-full h-[100dvh] bg-slate-50 relative overflow-hidden flex flex-col font-sans">
     <!-- Header -->
     <header class="absolute top-0 left-0 w-full z-10 bg-white/90 backdrop-blur-md shadow-sm px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-4 shrink-0">
         <router-link to="/" class="text-slate-500 hover:text-slate-800 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </router-link>
-        <h1 class="text-xl font-bold text-slate-800">成語阿米巴</h1>
+        <h1 class="text-xl font-bold text-slate-800 whitespace-nowrap">成語阿米巴</h1>
       </div>
       <div class="flex items-center gap-4">
           <div class="flex items-center gap-2">
@@ -32,7 +32,7 @@
           </div>
           <div class="flex flex-col items-end">
              <div class="font-bold text-2xl text-primary font-mono">{{ score }}</div>
-             <div v-if="combo > 1" class="text-xs font-bold text-orange-500 animate-bounce">
+             <div v-if="combo > 1" class="text-xs font-bold text-orange-500 animate-bounce whitespace-nowrap">
                 COMBO x{{ combo }}
              </div>
           </div>
@@ -61,8 +61,7 @@
                         'text-slate-700': selectedKey !== key
                     }"
                     :style="{ left: `${cell.x * 52}px`, top: `${cell.y * 52}px` }"
-                    @click.stop="selectCell(cell.x, cell.y, cell.char)"
-                    @dblclick.stop="handleCellDblClick(cell.x, cell.y)"
+                    @click.stop="handleCellInteract(cell.x, cell.y, cell.char, $event)"
                 >
                     {{ cell.char }}
                      <!-- Optional: Visualize idiom connections or ownership if needed -->
@@ -542,6 +541,28 @@ const selectCell = (x, y, char) => {
     } else {
         selectedKey.value = key;
         inputIdiom.value = '';
+    }
+};
+
+const lastClickTime = ref(0);
+const lastClickKey = ref(null);
+
+const handleCellInteract = (x, y, char, event) => {
+    const currentTime = new Date().getTime();
+    const key = `${x},${y}`;
+    const timeDiff = currentTime - lastClickTime.value;
+
+    if (key === lastClickKey.value && timeDiff < 300) {
+        // Double Click Detected
+        handleCellDblClick(x, y);
+        // Reset to avoid triple-click triggering again immediately or weird state
+        lastClickTime.value = 0;
+        lastClickKey.value = null;
+    } else {
+        // Single Click Logic
+        lastClickTime.value = currentTime;
+        lastClickKey.value = key;
+        selectCell(x, y, char);
     }
 };
 
