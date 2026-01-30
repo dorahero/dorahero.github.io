@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 src/data/env/.env
+src/data/成語大全(31648個成語解釋).txt
+src/data/idioms_processed.csv
