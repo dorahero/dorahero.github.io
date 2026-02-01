@@ -248,8 +248,8 @@ const fetchData = async () => {
     error.value = null;
     
     // Use a public proxy that handles CORS and providing stats in a simple JSON format.
-    // Source: https://leetcode-stats-api.herokuapp.com/
-    const apiUrl = `https://leetcode-stats-api.herokuapp.com/${username}`;
+    // Source: https://leetcode-api-faisalshohag.vercel.app/
+    const apiUrl = `https://leetcode-api-faisalshohag.vercel.app/${username}`;
     
     try {
         const response = await fetch(apiUrl);
@@ -260,8 +260,14 @@ const fetchData = async () => {
         
         const result = await response.json();
         
-        if (result.status === 'error') {
-            throw new Error(result.message || 'Error fetching data');
+        // The new API might not use 'status: error' but let's keep it just in case.
+        // Also check for essential data to ensure validity.
+        if (result.status === 'error' || result.errors) {
+            throw new Error(result.message || (result.errors ? result.errors[0].message : 'Error fetching data'));
+        }
+        
+        if (typeof result.totalSolved === 'undefined') {
+             throw new Error('Invalid data format received from API');
         }
         
         // Map the API response to our stats structure
