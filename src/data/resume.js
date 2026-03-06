@@ -127,6 +127,15 @@ export const portfolio = [
         ]
     },
     {
+        id: 'earthquake-map',
+        title: '台灣地震偵測',
+        desc: '顯示台灣近期地震活動與影響範圍',
+        image: '',
+        items: [
+            { title: '台灣地震偵測', url: '/earthquake-map' }
+        ]
+    },
+    {
         id: 'idiom-amoeba',
         title: '成語阿米巴',
         desc: '成語接龍小遊戲',

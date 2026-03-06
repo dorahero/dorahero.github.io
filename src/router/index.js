@@ -3,6 +3,7 @@ import IdiomAmoeba from '../views/IdiomAmoeba.vue'
 import Home from '../views/Home.vue'
 import AirQualityMap from '../views/AirQualityMap.vue'
 import LeetCodeStats from '../views/LeetCodeStats.vue'
+import EarthquakeMap from '../views/EarthquakeMap.vue'
 
 const routes = [
     {
@@ -16,6 +17,12 @@ const routes = [
         name: 'AirQualityMap',
         component: AirQualityMap,
         meta: { title: '空氣品質地圖 | Red' }
+    },
+    {
+        path: '/earthquake-map',
+        name: 'EarthquakeMap',
+        component: EarthquakeMap,
+        meta: { title: '台灣地震偵測 | Red' }
     },
     {
         path: '/idiom-amoeba',
