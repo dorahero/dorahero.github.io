@@ -12,9 +12,9 @@
 
         <!-- 桌面選單 -->
         <div class="hidden md:flex items-center space-x-8 font-medium text-slate-600">
-          <a href="#about" class="hover:text-primary transition-colors">自我介紹</a>
-          <a href="#education" class="hover:text-primary transition-colors">學習經歷</a>
-          <a href="#experience" class="hover:text-primary transition-colors">工作經歷</a>
+          <a href="#" @click.prevent="scrollToSection('about')" class="hover:text-primary transition-colors">自我介紹</a>
+          <a href="#" @click.prevent="scrollToSection('experience')" class="hover:text-primary transition-colors">工作經歷</a>
+          <a href="#" @click.prevent="scrollToSection('education')" class="hover:text-primary transition-colors">學習經歷</a>
           <!-- 作品集 Dropdown -->
           <div class="relative group">
             <button class="flex items-center gap-1 hover:text-primary transition-colors py-2">
@@ -108,9 +108,9 @@
         class="md:hidden bg-white border-t border-slate-100 px-6 py-4 shadow-lg absolute w-full"
       >
         <div class="flex flex-col space-y-4">
-          <a href="#about" class="block text-slate-600 hover:text-primary" @click="toggleMenu">自我介紹</a>
-          <a href="#education" class="block text-slate-600 hover:text-primary" @click="toggleMenu">學習經歷</a>
-          <a href="#experience" class="block text-slate-600 hover:text-primary" @click="toggleMenu">工作經歷</a>
+          <a href="#" class="block text-slate-600 hover:text-primary" @click.prevent="scrollToSection('about'); toggleMenu()">自我介紹</a>
+          <a href="#" class="block text-slate-600 hover:text-primary" @click.prevent="scrollToSection('education'); toggleMenu()">學習經歷</a>
+          <a href="#" class="block text-slate-600 hover:text-primary" @click.prevent="scrollToSection('experience'); toggleMenu()">工作經歷</a>
            <router-link to="/air-quality-map" class="block text-slate-600 hover:text-primary" @click="toggleMenu">空氣品質地圖</router-link>
           
           <div class="pt-2 border-t border-slate-100">
@@ -416,6 +416,20 @@ const isScrolled = ref(false);
 // Methods
 const toggleMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
+};
+
+const scrollToSection = (id) => {
+  const element = document.getElementById(id);
+  if (element) {
+    const offset = 80; // 考慮導航列高度 (h-20 = 5rem = 80px)
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
 };
 
 const handleScroll = () => {
