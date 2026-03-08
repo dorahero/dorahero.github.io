@@ -109,9 +109,8 @@
       >
         <div class="flex flex-col space-y-4">
           <a href="#" class="block text-slate-600 hover:text-primary" @click.prevent="scrollToSection('about'); toggleMenu()">自我介紹</a>
-          <a href="#" class="block text-slate-600 hover:text-primary" @click.prevent="scrollToSection('education'); toggleMenu()">學習經歷</a>
           <a href="#" class="block text-slate-600 hover:text-primary" @click.prevent="scrollToSection('experience'); toggleMenu()">工作經歷</a>
-           <router-link to="/air-quality-map" class="block text-slate-600 hover:text-primary" @click="toggleMenu">空氣品質地圖</router-link>
+          <a href="#" class="block text-slate-600 hover:text-primary" @click.prevent="scrollToSection('education'); toggleMenu()">學習經歷</a>
           
           <div class="pt-2 border-t border-slate-100">
             <span class="block text-sm font-semibold text-slate-400 mb-2 px-2">小工具</span>
