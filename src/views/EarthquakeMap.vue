@@ -66,6 +66,7 @@
               <div 
                 v-for="(eq, index) in earthquakes" 
                 :key="eq.EarthquakeNo"
+                :id="'eq-item-' + eq.EarthquakeNo"
                 @click="focusEarthquake(eq)"
                 class="group p-4 rounded-xl border border-slate-100 bg-slate-50 hover:bg-red-50 hover:border-red-200 transition-all cursor-pointer"
                 :class="{'ring-2 ring-red-400 bg-red-50': selectedEqNo === eq.EarthquakeNo}"
@@ -132,12 +133,21 @@ const formatTime = (timeStr) => {
   }
 };
 
-const focusEarthquake = (eq) => {
+const focusEarthquake = (eq, fromMap = false) => {
   selectedEqNo.value = eq.EarthquakeNo;
+  
+  // 捲動右側列表到對應項目
+  nextTick(() => {
+    const el = document.getElementById(`eq-item-${eq.EarthquakeNo}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
+
   const lat = parseFloat(eq.EarthquakeInfo.Epicenter.EpicenterLatitude);
   const lon = parseFloat(eq.EarthquakeInfo.Epicenter.EpicenterLongitude);
   
-  if (map.value && lat && lon) {
+  if (!fromMap && map.value && lat && lon) {
     map.value.flyTo([lat, lon], 10, {
       animate: true,
       duration: 1.5
@@ -210,6 +220,12 @@ const fetchEarthquakeData = async () => {
             `;
 
             circleMarker.bindPopup(popupContent);
+            
+            // 監聽地圖上的點擊事件，同步更新右側列表
+            circleMarker.on('click', () => {
+                focusEarthquake(eq, true);
+            });
+
             circleMarker.addTo(map.value);
             
             // Store marker for later access
