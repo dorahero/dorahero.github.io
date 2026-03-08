@@ -29,6 +29,7 @@ jobs:
         run: npm run build
         env:
           VITE_TAIWAN_AQI_API_KEY: ${{ secrets.TAIWAN_AQI_API_KEY }}
+          VITE_TAIWAN_EARTHQUAKE_API_KEY: ${{ secrets.TAIWAN_EARTHQUAKE_API_KEY }}
 
       - name: Deploy
         uses: jamesIves/github-pages-deploy-action@v4
