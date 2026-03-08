@@ -144,15 +144,15 @@ export const portfolio = [
             { title: '成語阿米巴', url: '/idiom-amoeba' }
         ]
     },
-    // {
-    //     id: 'leetcode-stats',
-    //     title: 'LeetCode 刷題進度',
-    //     desc: 'LeetCode 刷題統計圖表',
-    //     image: '',
-    //     items: [
-    //         { title: '查看進度', url: '/leetcode-stats' }
-    //     ]
-    // },
+    {
+        id: 'leetcode-stats',
+        title: 'LeetCode 刷題進度',
+        desc: 'LeetCode 刷題統計圖表',
+        image: '',
+        items: [
+            { title: '查看進度', url: '/leetcode-stats' }
+        ]
+    },
 ];
 
 export const socialLinks = {

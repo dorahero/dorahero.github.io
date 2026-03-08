@@ -6,16 +6,19 @@
     -->
     <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/50">
       <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-         <router-link to="/" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary flex items-center gap-2">
-            <ArrowLeft class="w-6 h-6 text-slate-600 hover:text-primary transition-colors" />
-            Red.
-         </router-link>
-         <div class="text-lg font-semibold text-slate-600">LeetCode 刷題進度</div>
+        <router-link to="/" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          Red.
+        </router-link>
+        
+        <div class="flex items-center space-x-8 font-medium text-slate-600">
+             <router-link to="/" class="hover:text-primary transition-colors">回首頁</router-link>
+        </div>
       </div>
     </nav>
 
     <main class="pt-32 pb-20 px-6">
       <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center">LeetCode 刷題進度</h1>
         <!-- Error State -->
         <div v-if="error" class="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl mb-8 flex items-center justify-between">
           <span>{{ error }}</span>
@@ -133,7 +136,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { ArrowLeft, CheckCircle } from 'lucide-vue-next';
+import { CheckCircle } from 'lucide-vue-next';
 
 const username = "dorahero2727";
 const loading = ref(true);
