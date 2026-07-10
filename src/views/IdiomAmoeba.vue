@@ -820,24 +820,27 @@ const reloadPage = () => {
 
 
 // --- API ---
+const cleanText = (str) => {
+    if (!str) return '';
+    return str.replace(/[`~]/g, '');
+};
+
 const fetchDefinitionData = async (word) => {
     try {
-        const response = await fetch(`https://www.moedict.tw/uni/${encodeURIComponent(word)}`);
+        const response = await fetch(`https://www.moedict.tw/a/${encodeURIComponent(word)}.json`);
         if (!response.ok) throw new Error('API Error');
         const data = await response.json();
         
-        // Parse data based on new requirement
-        // JSON Ex: { heteronyms: [{ bopomofo, pinyin, definitions: [{def: "..."}] }], title: "..." }
+        const firstHeteronym = data.h?.[0] || {};
+        const firstDefinition = firstHeteronym.d?.[0] || {};
         
         return {
-            title: data.title,
-            bopomofo: data.heteronyms?.[0]?.bopomofo,
-            pinyin: data.heteronyms?.[0]?.pinyin,
-            // Assuming the first definition is the primary one we want to show, per user example structure
-            // User example: definitions: [ { def: "..."} ]
-            definition: data.heteronyms?.[0]?.definitions?.[0]?.def,
-            antonyms: data.heteronyms?.[0]?.definitions?.[0]?.antonyms,
-            synonyms: data.heteronyms?.[0]?.definitions?.[0]?.synonyms
+            title: cleanText(data.t || data.title),
+            bopomofo: cleanText(firstHeteronym.b || firstHeteronym.bopomofo),
+            pinyin: cleanText(firstHeteronym.p || firstHeteronym.pinyin),
+            definition: cleanText(firstDefinition.f || firstDefinition.def),
+            antonyms: cleanText(firstDefinition.a || firstDefinition.antonyms),
+            synonyms: cleanText(firstDefinition.s || firstDefinition.synonyms)
         };
         
     } catch (e) {
